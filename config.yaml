@@ -1,0 +1,34 @@
+name:
+  model_name: "yolo_v11"
+
+model:
+  name: yolo11n
+  experiment: development
+
+data: 
+  root: data
+  sampling: sampling
+  train_path: train
+  test_path: test
+  valid_path: valid
+  num_classes: 1
+  names: Palm-Tree
+
+output:
+  root: output
+  clean: clean
+  model: model
+
+train:
+  test_size: 0.2
+  random_state: 42
+  shuffle: true
+  batch_size: 8
+  num_classes: 34
+  batch_size: 8
+  num_workers: 4
+  max_epochs: 3
+
+preprocessing:
+  resize_img: 640
+

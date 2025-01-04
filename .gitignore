@@ -1,0 +1,4 @@
+data/
+output/
+sampling/
+**/__pycache__/
