@@ -11,6 +11,7 @@ import matplotlib.patches as patches
 from datetime import datetime
 from roboflow import Roboflow
 import shutil
+from utils import get_device
 
 
 class Cleaner(Configurations):
@@ -58,6 +59,8 @@ class Cleaner(Configurations):
         # Create the sampling directory if it doesn't exist
         sampling_dir = self.config['data']['sampling']
         os.makedirs(sampling_dir, exist_ok=True)
+
+        print(get_device())
         
         self.move_files(data= self.img_train[:number_sampling], sampling_dir= sampling_dir)
         self.move_files(data= self.label_train[:number_sampling], sampling_dir= sampling_dir)

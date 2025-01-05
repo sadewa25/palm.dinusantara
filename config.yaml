@@ -1,8 +1,8 @@
 name:
-  model_name: "yolo_v11"
+  model_name: "yolo_v10"
 
 model:
-  name: yolo11n
+  name: yolov10n
   experiment: development
 
 data: 
@@ -24,10 +24,8 @@ train:
   random_state: 42
   shuffle: true
   batch_size: 8
-  num_classes: 34
-  batch_size: 8
   num_workers: 4
-  max_epochs: 3
+  max_epochs: 512
 
 preprocessing:
   resize_img: 640
