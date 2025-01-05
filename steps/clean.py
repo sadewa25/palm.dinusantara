@@ -19,11 +19,14 @@ class Cleaner(Configurations):
         base_path = self.config['data']['root']
         train_path = self.config['data']['train_path']
         valid_path = self.config['data']['valid_path']
+        test_path = self.config['data']['test_path']
         
         self.img_train_path = f"{base_path}/{train_path}/images"
         self.label_train_path = f"{base_path}/{train_path}/labels"
         self.img_valid_path = f"{base_path}/{valid_path}/images"
         self.label_valid_path = f"{base_path}/{valid_path}/labels"
+        self.img_test_path = f"{base_path}/{test_path}/images"
+        self.label_test_path = f"{base_path}/{test_path}/labels"
         
         self.img_train = glob.glob(f"{self.img_train_path}/*.jpg")
         self.label_train = glob.glob(f"{self.label_train_path}/*.txt")
@@ -34,6 +37,11 @@ class Cleaner(Configurations):
         self.label_val = glob.glob(f"{self.label_valid_path}/*.txt")
         self.img_val.sort()
         self.label_val.sort()
+        
+        self.img_test = glob.glob(f"{self.img_test_path}/*.jpg")
+        self.label_test = glob.glob(f"{self.label_test_path}/*.txt")
+        self.img_test.sort()
+        self.label_test.sort()
         
     def move_files(self, data: list[str], sampling_dir: str):
         for path in data:
@@ -55,6 +63,8 @@ class Cleaner(Configurations):
         self.move_files(data= self.label_train[:number_sampling], sampling_dir= sampling_dir)
         self.move_files(data= self.img_val[:number_sampling], sampling_dir= sampling_dir)
         self.move_files(data= self.label_val[:number_sampling], sampling_dir= sampling_dir)
+        self.move_files(data= self.img_test[:number_sampling], sampling_dir= sampling_dir)
+        self.move_files(data= self.label_test[:number_sampling], sampling_dir= sampling_dir)
         
         
     def rename_directory(self):

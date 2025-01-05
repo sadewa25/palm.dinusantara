@@ -1,6 +1,6 @@
 names:
 - Palm-Tree
 nc: 1
-test: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara.id/sampling/test/images
-train: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara.id/sampling/train/images
-val: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara.id/sampling/valid/images
+test: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling/test/images
+train: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling/train/images
+val: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling/valid/images
