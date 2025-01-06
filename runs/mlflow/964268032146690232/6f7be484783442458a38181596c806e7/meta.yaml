@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/AI/palm.dinusantara/runs/mlflow/964268032146690232/6f7be484783442458a38181596c806e7/artifacts
+end_time: 1736153382194
+entry_point_name: ''
+experiment_id: '964268032146690232'
+lifecycle_stage: active
+run_id: 6f7be484783442458a38181596c806e7
+run_name: '20250106_143701'
+run_uuid: 6f7be484783442458a38181596c806e7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736149204760
+status: 3
+tags: []
+user_id: msiin

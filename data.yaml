@@ -1,6 +1,6 @@
 names:
 - Palm-Tree
 nc: 1
-test: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data/test/images
-train: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data/train/images
-val: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data/valid/images
+test: C:\AI\palm.dinusantara\data\test\images
+train: C:\AI\palm.dinusantara\data\train\images
+val: C:\AI\palm.dinusantara\data\valid\images

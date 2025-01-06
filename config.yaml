@@ -1,8 +1,8 @@
 name:
-  model_name: "yolo_v11"
+  model_name: "yolo_v10"
 
 model:
-  name: yolov11n
+  name: yolov10n
   experiment: development
 
 data: 
