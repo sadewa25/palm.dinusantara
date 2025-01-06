@@ -1,15 +1,8 @@
 name:
-<<<<<<< Updated upstream
-  model_name: "yolo_v8"
-
-model:
-  name: yolov8n
-=======
   model_name: "yolo_v11"
 
 model:
   name: yolov11n
->>>>>>> Stashed changes
   experiment: development
 
 data: 

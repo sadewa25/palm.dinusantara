@@ -72,16 +72,19 @@ class Trainer(Configurations):
         
         
     def visualize(self, path_onnx: str, image_test: str):
+        img_size = self.config['preprocessing']['resize_img']
         # Load model and run inference
         onnx_model = YOLO(path_onnx)
-        results = onnx_model(image_test)[0]
+        img = cv2.imread(image_test)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
+        img = cv2.resize(img, (img_size, img_size))
+        
+        results = onnx_model(img)[0]
         
         # Create figure and axes
         fig, ax = plt.subplots(1)
         
         # Load and display image using cv2
-        img = cv2.imread(image_test)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
         ax.imshow(img)
         
         # Count total objects

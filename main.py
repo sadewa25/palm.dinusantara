@@ -5,10 +5,8 @@ from steps.train import Trainer
 import logging
 from typing import Literal
 
-
 # Set up logging
 logging.basicConfig(level=logging.INFO,format='%(asctime)s:%(levelname)s:%(message)s')
-
 
 def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_onnx']):
     if status != 'export' and status != 'visualize_onnx':
@@ -47,19 +45,18 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         trainer.val_test(model= modelTrain)
         logging.info("Process Completed")
         
-        
     elif status == 'export':
         trainer = Trainer()
         logging.info("Exporting Progress")
-        path = trainer.export_model("yolo11n_development/20250105_164322/weights/best.pt")
+        path = trainer.export_model("yolov8n_development/20250106_092214/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
         trainer = Trainer()
-        trainer.visualize(path_onnx= "yolo11n_development/20250105_164322/weights/best.onnx", image_test= "data/test/images/DJI_0098_0_JPG.rf.272d7237869e77ea358dd11bb3fa9e95.jpg")
+        # trainer.visualize(path_onnx= "yolo11n_development/20250105_164322/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
+        trainer.visualize(path_onnx= "yolov8n_development/20250106_092214/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
         
-    
-    
+        
 if __name__ == "__main__":
     # main(status= 'all')
     # main(status='sampling')
