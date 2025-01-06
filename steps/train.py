@@ -5,6 +5,9 @@ import yaml
 from ultralytics import settings
 from utils import get_device
 from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import cv2
 
 class Trainer(Configurations):
     def __init__(self):
@@ -66,5 +69,59 @@ class Trainer(Configurations):
             dynamic=True,
             simplify=True,
         )
+        
+        
+    def visualize(self, path_onnx: str, image_test: str):
+        # Load model and run inference
+        onnx_model = YOLO(path_onnx)
+        results = onnx_model(image_test)[0]
+        
+        # Create figure and axes
+        fig, ax = plt.subplots(1)
+        
+        # Load and display image using cv2
+        img = cv2.imread(image_test)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
+        ax.imshow(img)
+        
+        # Count total objects
+        total_objects = len(results.boxes)
+        plt.title(f'Total Objects Detected: {total_objects}', 
+                pad=10, 
+                fontsize=12, 
+                fontweight='bold')
+        
+        # Plot each detection
+        boxes = results.boxes
+        for box in boxes:
+            x1, y1, x2, y2 = box.xyxy[0]
+            conf = box.conf[0]
+            cls = box.cls[0]
+            
+            # Create rectangle patch
+            rect = patches.Rectangle(
+                (x1, y1), 
+                x2-x1, 
+                y2-y1, 
+                linewidth=2, 
+                edgecolor='r', 
+                facecolor='none'
+            )
+            ax.add_patch(rect)
+            
+            # Add label
+            # label = f"{conf:.2f}"
+            # plt.text(x1, y1, label, color='white', bbox=dict(facecolor='red', alpha=0.5))
+        
+        
+        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        save_path = f"output/model/{current_time}.png"
+        plt.axis('off')
+        plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
+        plt.close()
+        
+        return results, save_path
+        
+        
         
         

@@ -27,8 +27,13 @@ There are two projects which contains of this projects, first is about the count
 
 
 ## Screenshots
+- F1-Score Palm Tree
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![F1-Score](yolo11n_development/20250105_164322/F1_curve.png)
+
+- Results Palm Tree
+
+![F1-Score](yolo11n_development/20250105_164322/results.png)
 
 
 ## Run Locally
@@ -37,6 +42,11 @@ Clone the project
 
 ```bash
   git clone https://link-to-project
+```
+
+Download datasets
+```
+https://drive.google.com/file/d/1t7led_uZB_UA6Va2q7TmqxCxOKk0q1O5/view?usp=sharing
 ```
 
 Go to the project directory
