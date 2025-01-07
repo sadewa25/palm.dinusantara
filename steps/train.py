@@ -17,7 +17,7 @@ class Trainer(Configurations):
         self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S")
         
     def yamlPreparation(self, status: str):
-        root_path = self.config['data']['sampling'] if status == "sampling" else self.config['data']['root']
+        root_path = self.config['data_count']['sampling'] if status == "sampling" else self.config['data_count']['root']
         
         train_path = os.path.abspath(os.path.join(root_path, 'train/images'))
         valid_path = os.path.abspath(os.path.join(root_path, 'valid/images'))
@@ -27,8 +27,8 @@ class Trainer(Configurations):
             'train': train_path,
             'val': valid_path,
             'test': test_path,
-            'nc': self.config['data']['num_classes'],
-            'names': [self.config['data']['names']]
+            'nc': self.config['data_count']['num_classes'],
+            'names': [self.config['data_count']['names']]
         }
         
         with open('data.yaml', 'w') as f:
@@ -73,6 +73,10 @@ class Trainer(Configurations):
         
     def visualize(self, path_onnx: str, image_test: str):
         img_size = self.config['preprocessing']['resize_img']
+        
+        # Get the base path
+        base_model = os.path.dirname(path_onnx).split('/')[0].split('_')[0]
+        
         # Load model and run inference
         onnx_model = YOLO(path_onnx)
         img = cv2.imread(image_test)
@@ -122,7 +126,7 @@ class Trainer(Configurations):
         
         
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-        save_path = f"output/model/{current_time}.png"
+        save_path = f"output/model/{base_model}_{current_time}.png"
         plt.axis('off')
         plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
         plt.close()

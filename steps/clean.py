@@ -15,12 +15,15 @@ from utils import get_device
 
 
 class Cleaner(Configurations):
-    def __init__(self):
+    def __init__(self, status: Literal['count', 'classify'] = 'count'):
         super().__init__()
-        base_path = self.config['data']['root']
-        train_path = self.config['data']['train_path']
-        valid_path = self.config['data']['valid_path']
-        test_path = self.config['data']['test_path']
+        
+        self.status = 'data_count' if status == 'count' else 'data_classify'
+        
+        base_path = self.config[self.status]['root']
+        train_path = self.config[self.status]['train_path']
+        valid_path = self.config[self.status]['valid_path']
+        test_path = self.config[self.status]['test_path']
         
         self.img_train_path = f"{base_path}/{train_path}/images"
         self.label_train_path = f"{base_path}/{train_path}/labels"
@@ -45,9 +48,10 @@ class Cleaner(Configurations):
         self.label_test.sort()
         
     def move_files(self, data: list[str], sampling_dir: str):
+        real_path = self.config[self.status]['root']
         for path in data:
             # Determine the relative path of the image
-            relative_path = os.path.relpath(path, self.config['data']['root'])
+            relative_path = os.path.relpath(path, real_path)
             # Determine the destination path in the sampling directory
             dest_path = os.path.join(sampling_dir, relative_path)
             # Create the necessary subdirectories in the sampling directory
@@ -55,12 +59,12 @@ class Cleaner(Configurations):
             # Copy the image to the sampling directory
             shutil.copy(path, dest_path)
         
+        
     def sampling_images(self, number_sampling: int):
         # Create the sampling directory if it doesn't exist
-        sampling_dir = self.config['data']['sampling']
+        sampling_dir = ''
+        sampling_dir = self.config[self.status]['sampling']
         os.makedirs(sampling_dir, exist_ok=True)
-
-        print(get_device())
         
         self.move_files(data= self.img_train[:number_sampling], sampling_dir= sampling_dir)
         self.move_files(data= self.label_train[:number_sampling], sampling_dir= sampling_dir)
@@ -70,18 +74,50 @@ class Cleaner(Configurations):
         self.move_files(data= self.label_test[:number_sampling], sampling_dir= sampling_dir)
         
         
-    def rename_directory(self):
-        old_name = 'Palm Tree Label 200m Splitted.v7i.yolov11'
-        new_name = self.config['data']['root']
+    def rename_directory(self, status: Literal['count', 'classify'] = 'count'):
+        old_name = self.config[self.status]['old']
+        new_name = self.config[self.status]['root']
+        
         if os.path.exists(old_name):
             os.rename(old_name, new_name)
+            
+    def remove_inside_folder(self, folder_path):
+        # Check if the folder exists
+        if os.path.exists(folder_path):
+            # Remove all contents inside the folder
+            try: 
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    try:
+                        if os.path.isfile(file_path) or os.path.islink(file_path):
+                            os.unlink(file_path)  # Remove the file
+                        elif os.path.isdir(file_path):
+                            shutil.rmtree(file_path)  # Remove the directory
+                    except Exception as e:
+                        print(f'Failed to delete {file_path}. Reason: {e}')
+            except Exception as e:
+                if os.path.isfile(folder_path) or os.path.islink(folder_path):
+                    os.unlink(folder_path)  # Remove the file
+        else:
+            print(f'The folder {folder_path} does not exist.')
+            
+            
+        if  os.path.exists(folder_path) and not os.listdir(folder_path):
+            try:
+                os.rmdir(folder_path)
+            except Exception as e:
+                print(f'Failed to remove empty folder {folder_path}. Reason: {e}')
+            
         
-    def download_datasets(self):
-        rf = Roboflow(api_key="LjjjZ43esu69CcKuFaCz")
-        project = rf.workspace("cryospace-yylkk").project("palm-tree-label-200m-splitted")
-        version = project.version(7)
-        dataset = version.download("yolov11")
-        return dataset
+    def unused_datasets(self):
+        paths = glob.glob(f"{self.config[self.status]['root']}/*")
+        filtered_paths = [path for path in paths if 'apples' not in os.path.basename(path)]
+        print(filtered_paths)
+        
+        for i in filtered_paths: 
+            self.remove_inside_folder(i)
+        # print(path)
+        
     
     def isLabelExists(self, status: Literal['train', 'valid']):
         img_status = self.img_train if status == 'train' else self.img_val
