@@ -58,8 +58,8 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         
         
 if __name__ == "__main__":
-    # main(status= 'all')
+    main(status= 'all')
     # main(status='sampling')
     # main(status='export')
-    main(status='visualize_onnx')
+    # main(status='visualize_onnx')
     # main(status='sam')
