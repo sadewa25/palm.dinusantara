@@ -1,13 +1,24 @@
 name:
-  model_name: "yolo_v10"
+  model_name: "yolo_v11"
 
 model:
-  name: yolov10n
+  name: yolo11n
   experiment: development
 
-data: 
-  root: data
+data_count: 
+  old: Palm Tree Label 200m Splitted.v7i.yolov11
+  root: data_count
   sampling: sampling
+  train_path: train
+  test_path: test
+  valid_path: valid
+  num_classes: 1
+  names: Palm-Tree
+
+data_classify: 
+  old: acfr-fruit-dataset
+  root: data_classify
+  sampling: sampling_classify
   train_path: train
   test_path: test
   valid_path: valid
@@ -25,7 +36,7 @@ train:
   shuffle: true
   batch_size: 8
   num_workers: 4
-  max_epochs: 512
+  max_epochs: 1
 
 preprocessing:
   resize_img: 640
