@@ -53,8 +53,8 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         
     elif status == 'visualize_onnx':
         trainer = Trainer()
-        # trainer.visualize(path_onnx= "yolo11n_development/20250105_164322/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
-        trainer.visualize(path_onnx= "yolov8n_development/20250106_092214/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
+        trainer.visualize(path_onnx= "yolo11n_development/20250105_164322/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
+        # trainer.visualize(path_onnx= "yolov8n_development/20250106_092214/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
         
         
 if __name__ == "__main__":

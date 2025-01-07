@@ -2,3 +2,4 @@ data/
 sampling/
 **/__pycache__/
 detection/
+acfr-fruit-dataset/

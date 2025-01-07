@@ -79,7 +79,11 @@ class Trainer(Configurations):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
         img = cv2.resize(img, (img_size, img_size))
         
-        results = onnx_model(img)[0]
+        results = onnx_model.predict(img, 
+            max_det=-1, 
+            conf=0.25,        # Confidence threshold
+            iou=0.45
+        )[0]
         
         # Create figure and axes
         fig, ax = plt.subplots(1)
