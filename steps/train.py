@@ -16,7 +16,8 @@ class Trainer(Configurations):
         self.status = 'data_count' if status == 'count' else 'data_classify'
         self.batch_size = self.config['train']['batch_size']
         self.image_size = self.config['preprocessing']['resize_img']
-        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S")
+        ext_machine = '_classify' if self.status == "data_classify" else ''
+        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + ext_machine
         
     def yamlPreparation(self, status: str):
         root_path = self.config[self.status]['sampling'] if status == "sampling" else self.config[self.status]['root']
@@ -60,7 +61,7 @@ class Trainer(Configurations):
     
     def val_test(self, model):
         # Customize validation settings
-        model.val(data="data.yaml", imgsz=self.image_size, batch=self.batch_size, device=get_device(), split='test', name= f"{self.run_name}_test")
+        model.val(data=self.config[self.status]['yaml'], imgsz=self.image_size, batch=self.batch_size, device=get_device(), split='test', name= f"{self.run_name}_test")
     
     
     def export_model(self, path):

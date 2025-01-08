@@ -19,8 +19,8 @@ class Cleaner(Configurations):
         super().__init__()
         
         self.status = 'data_count' if status == 'count' else 'data_classify'
-        extImages = '.jpg' if status == 'count' else '.png'
-        extLabels = '.txt' if status == 'count' else '.csv'
+        extImages = '.jpg' 
+        extLabels = '.txt'
         
         base_path = self.config[self.status]['root']
         train_path = self.config[self.status]['train_path']
@@ -77,7 +77,7 @@ class Cleaner(Configurations):
         self.move_files(data= self.label_test[:number_sampling], sampling_dir= sampling_dir)
         
         
-    def rename_directory(self, status: Literal['count', 'classify'] = 'count'):
+    def rename_directory(self):
         old_name = self.config[self.status]['old']
         new_name = self.config[self.status]['root']
         

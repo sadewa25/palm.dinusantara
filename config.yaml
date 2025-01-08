@@ -17,7 +17,7 @@ data_count:
   yaml: data.yaml
 
 data_classify: 
-  old: acfr-fruit-dataset
+  old: Apple Detection.v2i.yolov11
   root: data_classify
   sampling: sampling_classify
   train_path: train
