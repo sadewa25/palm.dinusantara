@@ -14,10 +14,21 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         cleaner.rename_directory()
         logging.info("Remove Unused Files")
         cleaner.unused_datasets()
+        logging.info("Reorder The Files")
+        cleaner.reorder_datasets()
         
         if status == 'sampling':
             logging.info("Sampling Images")
             cleaner.sampling_images(5)
+            
+        # trainer = Trainer('classify')
+        # logging.info("Create data.yaml")
+        # trainer.yamlPreparation(status= status)
+        # logging.info("Training the model")
+        # modelTrain = trainer.train()
+        # logging.info("Validation the model")
+        # trainer.val_test(model= modelTrain)
+        # logging.info("Process Completed")
             
 
 if __name__ == "__main__":

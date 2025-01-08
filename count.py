@@ -34,7 +34,7 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         # generate visualization of the data
         # cleaner.visualize_data(train_loader)
         
-        trainer = Trainer()
+        trainer = Trainer('count')
         logging.info("Create data.yaml")
         trainer.yamlPreparation(status= status)
         logging.info("Training the model")
@@ -46,19 +46,21 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
     elif status == 'export':
         trainer = Trainer()
         logging.info("Exporting Progress")
-        path = trainer.export_model("yolov10n_development/20250106_160259/weights/best.pt")
+        path = trainer.export_model("yolov9t_development/20250107_113955/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
         trainer = Trainer()
-        inp = input("Enter the model (1: 8n, 2: 10n, 3: 11n) -> ")
+        inp = input("Enter the model (1: 8n, 2: 9t, 3: 10n, 4: 11n) -> ")
         sample_path = "sample/assignment_test_palm.jpeg"
         path_model = ""
         if inp == "1":
             path_model = "yolov8n_development/20250106_092214/weights/best.onnx"
-        elif inp == "2":
-            path_model = "yolov10n_development/20250106_160259/weights/best.onnx"
+        if inp == "2":
+            path_model = "yolov9t_development/20250107_113955/weights/best.onnx"
         elif inp == "3":
+            path_model = "yolov10n_development/20250106_160259/weights/best.onnx"
+        elif inp == "4":
             path_model = "yolo11n_development/20250105_164322/weights/best.onnx"
         
         trainer.visualize(path_onnx= path_model, image_test= sample_path)

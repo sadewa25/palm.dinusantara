@@ -1,8 +1,8 @@
 name:
-  model_name: "yolov_9t"
+  model_name: "yolov_11"
 
 model:
-  name: yolov9t
+  name: yolo11n
   experiment: development
 
 data_count: 
@@ -14,6 +14,7 @@ data_count:
   valid_path: valid
   num_classes: 1
   names: Palm-Tree
+  yaml: data.yaml
 
 data_classify: 
   old: acfr-fruit-dataset
@@ -23,7 +24,8 @@ data_classify:
   test_path: test
   valid_path: valid
   num_classes: 1
-  names: Palm-Tree
+  names: Apples
+  yaml: data_classify.yaml
 
 output:
   root: output

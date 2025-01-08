@@ -8,16 +8,18 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2
+from typing import Literal
 
 class Trainer(Configurations):
-    def __init__(self):
+    def __init__(self, status: Literal['count', 'classify'] = 'count'):
         super().__init__()
+        self.status = 'data_count' if status == 'count' else 'data_classify'
         self.batch_size = self.config['train']['batch_size']
         self.image_size = self.config['preprocessing']['resize_img']
         self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S")
         
     def yamlPreparation(self, status: str):
-        root_path = self.config['data_count']['sampling'] if status == "sampling" else self.config['data_count']['root']
+        root_path = self.config[self.status]['sampling'] if status == "sampling" else self.config[self.status]['root']
         
         train_path = os.path.abspath(os.path.join(root_path, 'train/images'))
         valid_path = os.path.abspath(os.path.join(root_path, 'valid/images'))
@@ -27,11 +29,11 @@ class Trainer(Configurations):
             'train': train_path,
             'val': valid_path,
             'test': test_path,
-            'nc': self.config['data_count']['num_classes'],
-            'names': [self.config['data_count']['names']]
+            'nc': self.config[self.status]['num_classes'],
+            'names': [self.config[self.status]['names']]
         }
         
-        with open('data.yaml', 'w') as f:
+        with open(self.config[self.status]['yaml'], 'w') as f:
             yaml.dump(data_yaml, f)
             
         
@@ -40,13 +42,12 @@ class Trainer(Configurations):
         model_experiment = self.config['model']['experiment']
         epochs = self.config['train']['max_epochs']
         
-
         # Load YOLO model yolo11m.pt
         model = YOLO(f'{model_name}.pt')  # Use pretrained YOLOv8n model
 
         # Train the model
         model.train(
-            data= "data.yaml",
+            data= self.config[self.status]['yaml'],
             epochs=epochs,
             imgsz=self.image_size,
             batch=self.batch_size,

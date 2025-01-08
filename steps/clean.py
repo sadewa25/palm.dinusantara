@@ -11,7 +11,7 @@ import matplotlib.patches as patches
 from datetime import datetime
 from roboflow import Roboflow
 import shutil
-from utils import get_device
+from utils import get_device, open_txt, create_folder, move_files
 
 
 class Cleaner(Configurations):
@@ -19,6 +19,8 @@ class Cleaner(Configurations):
         super().__init__()
         
         self.status = 'data_count' if status == 'count' else 'data_classify'
+        extImages = '.jpg' if status == 'count' else '.png'
+        extLabels = '.txt' if status == 'count' else '.csv'
         
         base_path = self.config[self.status]['root']
         train_path = self.config[self.status]['train_path']
@@ -32,20 +34,21 @@ class Cleaner(Configurations):
         self.img_test_path = f"{base_path}/{test_path}/images"
         self.label_test_path = f"{base_path}/{test_path}/labels"
         
-        self.img_train = glob.glob(f"{self.img_train_path}/*.jpg")
-        self.label_train = glob.glob(f"{self.label_train_path}/*.txt")
+        self.img_train = glob.glob(f"{self.img_train_path}/*{extImages}")
+        self.label_train = glob.glob(f"{self.label_train_path}/*{extLabels}")
         self.img_train.sort()
         self.label_train.sort()
         
-        self.img_val = glob.glob(f"{self.img_valid_path}/*.jpg")
-        self.label_val = glob.glob(f"{self.label_valid_path}/*.txt")
+        self.img_val = glob.glob(f"{self.img_valid_path}/*{extImages}")
+        self.label_val = glob.glob(f"{self.label_valid_path}/*{extLabels}")
         self.img_val.sort()
         self.label_val.sort()
         
-        self.img_test = glob.glob(f"{self.img_test_path}/*.jpg")
-        self.label_test = glob.glob(f"{self.label_test_path}/*.txt")
+        self.img_test = glob.glob(f"{self.img_test_path}/*{extImages}")
+        self.label_test = glob.glob(f"{self.label_test_path}/*{extLabels}")
         self.img_test.sort()
         self.label_test.sort()
+        
         
     def move_files(self, data: list[str], sampling_dir: str):
         real_path = self.config[self.status]['root']
@@ -111,12 +114,51 @@ class Cleaner(Configurations):
         
     def unused_datasets(self):
         paths = glob.glob(f"{self.config[self.status]['root']}/*")
-        filtered_paths = [path for path in paths if 'apples' not in os.path.basename(path)]
-        print(filtered_paths)
-        
+        filtered_paths = [path for path in paths if os.path.basename(path)  not in ['apples', 'train', 'valid', 'test']]
         for i in filtered_paths: 
             self.remove_inside_folder(i)
-        # print(path)
+        
+    
+    def reorder_datasets(self):
+        base_path = f"{self.config[self.status]['root']}/apples"
+        train_path = f"{base_path}/sets/train.txt"
+        test_path = f"{base_path}/sets/test.txt"
+        valid_path = f"{base_path}/sets/val.txt"
+        
+        is_exists = os.path.exists(train_path)
+        
+        folder_train = f"{self.config[self.status]['root']}/train"
+        folder_test = f"{self.config[self.status]['root']}/test"
+        folder_valid = f"{self.config[self.status]['root']}/valid"
+        
+        create_folder(folder_train)
+        create_folder(folder_test)
+        create_folder(folder_valid)
+        
+        if is_exists:
+            data_train = open_txt(train_path)
+            data_test = open_txt(test_path)
+            data_valid = open_txt(valid_path)
+            
+            images_path = f"{base_path}/images"
+            labels_path = f"{base_path}/annotations"
+            
+            data_train.sort()
+            data_test.sort()
+            data_valid.sort()
+            
+            # train
+            move_files(paths= data_train, root_path= images_path, dest=f"{folder_train}/images", status='image')
+            move_files(paths= data_train, root_path= labels_path, dest=f"{folder_train}/labels", status='label')
+            
+            # val
+            move_files(paths= data_valid, root_path= images_path, dest=f"{folder_valid}/images", status='image')
+            move_files(paths= data_valid, root_path= labels_path, dest=f"{folder_valid}/labels", status='label')
+            
+            # test
+            move_files(paths= data_test, root_path= images_path, dest=f"{folder_test}/images", status='image')
+            move_files(paths= data_test, root_path= labels_path, dest=f"{folder_test}/labels", status='label')
+            
         
     
     def isLabelExists(self, status: Literal['train', 'valid']):
