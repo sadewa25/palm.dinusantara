@@ -1,6 +1,6 @@
 names:
 - Apples
 nc: 1
-test: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling_classify/test/images
-train: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling_classify/train/images
-val: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/sampling_classify/valid/images
+test: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data_classify/test/images
+train: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data_classify/train/images
+val: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/data_classify/valid/images
