@@ -44,7 +44,7 @@ class Trainer(Configurations):
         epochs = self.config['train']['max_epochs']
         
         # Load YOLO model yolo11m.pt
-        model = YOLO(f'{model_name}.pt')  # Use pretrained YOLOv8n model
+        model = YOLO(f'{model_name}.pt', task= 'detect')  # Use pretrained YOLOv8n model
 
         # Train the model
         model.train(
