@@ -25,7 +25,19 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         logging.info("Validation the model")
         trainer.val_test(model= modelTrain)
         logging.info("Process Completed")
-            
+        
+    elif status == 'export':
+        trainer = Trainer()
+        logging.info("Exporting Progress")
+        path = trainer.export_model("yolov9t_development/20250107_113955/weights/best.pt")
+        logging.info(f"Exporting Completed : {path}")
+        
 
 if __name__ == "__main__":
-    main("sampling")
+    inp = input("1: all, 2: sampling, 3: export, 4: validation, 5: visualize_onnx -> ")
+    
+    if inp == "1":
+        main("all")
+    
+    elif inp == "2":
+        main("sampling")

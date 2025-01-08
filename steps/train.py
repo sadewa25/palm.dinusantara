@@ -17,7 +17,7 @@ class Trainer(Configurations):
         self.batch_size = self.config['train']['batch_size']
         self.image_size = self.config['preprocessing']['resize_img']
         ext_machine = '_classify' if self.status == "data_classify" else ''
-        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + ext_machine
+        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{self.config['train']['max_epochs']}" + ext_machine
         
     def yamlPreparation(self, status: str):
         root_path = self.config[self.status]['sampling'] if status == "sampling" else self.config[self.status]['root']
