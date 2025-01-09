@@ -1,0 +1,15 @@
+artifact_uri: /Users/sadewawicak/Researchs/Dinusantara/palm.dinusantara/runs/mlflow/263221287858218345/effbe5dfe7f240279b8b26b698b65cde/artifacts
+end_time: 1736398581189
+entry_point_name: ''
+experiment_id: '263221287858218345'
+lifecycle_stage: active
+run_id: effbe5dfe7f240279b8b26b698b65cde
+run_name: 20250109_103641_512_classify
+run_uuid: effbe5dfe7f240279b8b26b698b65cde
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736393893224
+status: 3
+tags: []
+user_id: msiin

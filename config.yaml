@@ -1,9 +1,9 @@
 name:
-  model_name: "yolov_8n"
+  model_name: "yolov_9t"
 
 # yolo11m, yolo11n, yolov8n, yolov9t, yolov10n
 model:
-  name: yolov8n
+  name: yolov9t
   experiment: development
 
 data_count: 
@@ -39,7 +39,7 @@ train:
   shuffle: true
   batch_size: 4
   num_workers: 4
-  max_epochs: 128
+  max_epochs: 512
 
 preprocessing:
   resize_img: 640
