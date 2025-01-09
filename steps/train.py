@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2
 from typing import Literal
+import numpy as np
 
 class Trainer(Configurations):
     def __init__(self, status: Literal['count', 'classify'] = 'count'):
@@ -95,7 +96,7 @@ class Trainer(Configurations):
         )[0]
         
         # Create figure and axes
-        fig, ax = plt.subplots(1)
+        _, ax = plt.subplots(1)
         
         # Load and display image using cv2
         ax.imshow(img)
@@ -107,12 +108,45 @@ class Trainer(Configurations):
                 fontsize=12, 
                 fontweight='bold')
         
-        # Plot each detection
         boxes = results.boxes
+        
+        # Plot each detection
+        xyxy_val = boxes.xyxy
+        
+        # Define color ranges for classification
+        color_ranges = {
+            'red': ([0, 0, 100], [80, 80, 255]),        # Lower and Upper range for red
+            'yellow': ([0, 100, 100], [100, 255, 255]), # Yellow
+            'green': ([0, 100, 0], [100, 255, 100])     # Green
+        }
+        
+        count = 1
         for box in boxes:
             x1, y1, x2, y2 = box.xyxy[0]
             conf = box.conf[0]
             cls = box.cls[0]
+            
+            # Get region of interest within rectangle
+            roi = img[int(y1):int(y2), int(x1):int(x2)]
+            
+            # Convert to HSV
+            hsv_roi = cv2.cvtColor(roi, cv2.COLOR_RGB2HSV)
+            
+            # Define yellow range
+            label = 'unknown'
+            for color, (lower, upper) in color_ranges.items():
+                mask = cv2.inRange(hsv_roi, np.array(lower), np.array(upper))
+                if cv2.countNonZero(mask) > 0:  # Check if color exists
+                    label = color
+                    break
+            
+            back_img = cv2.cvtColor(roi, cv2.COLOR_RGB2BGR)
+            if label == 'yellow':
+                cv2.imwrite(f"output/yellow_roi_{count}.jpg", back_img)
+            elif label == 'red':
+                cv2.imwrite(f"output/red_roi_{count}.jpg", back_img)
+            elif label == 'green':
+                cv2.imwrite(f"output/green_roi_{count}.jpg", back_img)
             
             # Create rectangle patch
             rect = patches.Rectangle(
@@ -124,6 +158,8 @@ class Trainer(Configurations):
                 facecolor='none'
             )
             ax.add_patch(rect)
+            
+            count += 1
             
             # Add label
             # label = f"{conf:.2f}"
