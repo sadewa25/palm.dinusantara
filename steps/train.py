@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2
 from typing import Literal
+import numpy as np
 
 class Trainer(Configurations):
     def __init__(self, status: Literal['count', 'classify', 'resume'] = 'count'):
@@ -16,8 +17,8 @@ class Trainer(Configurations):
         self.status = 'data_count' if status == 'count' else 'data_classify'
         self.batch_size = self.config['train']['batch_size']
         self.image_size = self.config['preprocessing']['resize_img']
-        ext_machine = '_classify' if self.status == "data_classify" else ''
-        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{self.config['train']['max_epochs']}" + ext_machine
+        self.ext_machine = '_classify' if self.status == "data_classify" else ''
+        self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{self.config['train']['max_epochs']}" + self.ext_machine
         
     def yamlPreparation(self, status: Literal['sampling', 'all'] = 'all'):
         root_path = self.config[self.status]['sampling'] if status == 'sampling' else self.config[self.status]['root']
@@ -97,7 +98,7 @@ class Trainer(Configurations):
         )[0]
         
         # Create figure and axes
-        fig, ax = plt.subplots(1)
+        _, ax = plt.subplots(1)
         
         # Load and display image using cv2
         ax.imshow(img)
@@ -109,12 +110,46 @@ class Trainer(Configurations):
                 fontsize=12, 
                 fontweight='bold')
         
+
+        # Define color ranges for classification
+        color_ranges = {
+            'red': ([0, 0, 100], [80, 80, 255]),        # Lower and Upper range for red
+            'yellow': ([0, 100, 100], [100, 255, 255]), # Yellow
+            'green': ([0, 100, 0], [100, 255, 100])     # Green
+        }
+        
+        counts = {color: 0 for color in color_ranges}
+        
+        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        name_ext = f"{self.config['output']['root']}/{self.config['output']['model']}/{base_model}_{current_time}{self.ext_machine}"
+        
+        if not os.path.exists(name_ext):
+            os.makedirs(name_ext)
+        
         # Plot each detection
         boxes = results.boxes
         for box in boxes:
             x1, y1, x2, y2 = box.xyxy[0]
             conf = box.conf[0]
             cls = box.cls[0]
+            
+            # Get region of interest within rectangle
+            roi = img[int(y1):int(y2), int(x1):int(x2)]
+            
+            # Convert to HSV
+            hsv_roi = cv2.cvtColor(roi, cv2.COLOR_RGB2HSV)
+            
+            # Define yellow range
+            label = 'unknown'
+            for color, (lower, upper) in color_ranges.items():
+                mask = cv2.inRange(hsv_roi, np.array(lower), np.array(upper))
+                if cv2.countNonZero(mask) > 0:  # Check if color exists
+                    label = color
+                    counts[color] += 1
+                    break
+            
+            back_img = cv2.cvtColor(roi, cv2.COLOR_RGB2BGR)
+            cv2.imwrite(f"{name_ext}/{label}_{counts[label]}.jpg", back_img)
             
             # Create rectangle patch
             rect = patches.Rectangle(
@@ -131,9 +166,7 @@ class Trainer(Configurations):
             # label = f"{conf:.2f}"
             # plt.text(x1, y1, label, color='white', bbox=dict(facecolor='red', alpha=0.5))
         
-        
-        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-        save_path = f"output/model/{base_model}_{current_time}.png"
+        save_path = f"{name_ext}.png"
         plt.axis('off')
         plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
         plt.close()
