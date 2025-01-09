@@ -6,8 +6,8 @@ from typing import Literal
 # Set up logging
 logging.basicConfig(level=logging.INFO,format='%(asctime)s:%(levelname)s:%(message)s')
 
-def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_onnx']):
-    if status != 'export' and status != 'visualize_onnx':
+def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_onnx', 'resume']):
+    if status != 'export' and status != 'visualize_onnx' and status != 'resume':
         logging.info("Starting the process")
         cleaner = Cleaner(status= 'count')
         logging.info("Rename Directory")
@@ -66,11 +66,23 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
             path_model = "yolo11s_development/20250108_131732/weights/best.onnx"
         
         trainer.visualize(path_onnx= path_model, image_test= sample_path)
-        # trainer.visualize(path_onnx= "yolov8n_development/20250106_092214/weights/best.onnx", image_test= "sample/assignment_test_palm.jpeg")
+
+    
+    elif status == 'resume':
+        trainer = Trainer('count')
+        logging.info("Create data.yaml")
+        trainer.yamlPreparation()
+        logging.info("Training the model")
+        modelTrain = trainer.train()
+        logging.info("Validation the model")
+        trainer.val_test(model= modelTrain)
+        logging.info("Process Completed")
+
+    
         
         
 if __name__ == "__main__":
-    inp = input("Enter the command (1: all, 2: sampling, 3: export, 4: vis_onnx) -> ")
+    inp = input("Enter the command (1: all, 2: sampling, 3: export, 4: vis_onnx, 5: resume) -> ")
     if inp == "1":
         main(status= 'all')
         
@@ -82,3 +94,8 @@ if __name__ == "__main__":
         
     elif inp == "4":
         main(status='visualize_onnx')
+
+    elif inp == "5":
+        main(status='resume')
+
+    

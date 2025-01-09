@@ -11,7 +11,7 @@ import cv2
 from typing import Literal
 
 class Trainer(Configurations):
-    def __init__(self, status: Literal['count', 'classify'] = 'count'):
+    def __init__(self, status: Literal['count', 'classify', 'resume'] = 'count'):
         super().__init__()
         self.status = 'data_count' if status == 'count' else 'data_classify'
         self.batch_size = self.config['train']['batch_size']
@@ -19,8 +19,8 @@ class Trainer(Configurations):
         ext_machine = '_classify' if self.status == "data_classify" else ''
         self.run_name = datetime.now().strftime("%Y%m%d_%H%M%S") + f"_{self.config['train']['max_epochs']}" + ext_machine
         
-    def yamlPreparation(self, status: str):
-        root_path = self.config[self.status]['sampling'] if status == "sampling" else self.config[self.status]['root']
+    def yamlPreparation(self, status: Literal['sampling', 'all'] = 'all'):
+        root_path = self.config[self.status]['sampling'] if status == 'sampling' else self.config[self.status]['root']
         
         train_path = os.path.abspath(os.path.join(root_path, 'train/images'))
         valid_path = os.path.abspath(os.path.join(root_path, 'valid/images'))
@@ -38,13 +38,14 @@ class Trainer(Configurations):
             yaml.dump(data_yaml, f)
             
         
-    def train(self):
+    def train(self, status_train: Literal['start', 'resume'] = 'start', path: str = ''):
         model_name = self.config['model']['name']
         model_experiment = self.config['model']['experiment']
         epochs = self.config['train']['max_epochs']
         
         # Load YOLO model yolo11m.pt
-        model = YOLO(f'{model_name}.pt', task= 'detect')  # Use pretrained YOLOv8n model
+        model = YOLO(f'{model_name}.pt' if status_train == 'start' else path, task= 'detect')  # Use pretrained YOLOv8n model
+        is_resume = status_train == 'resume'
 
         # Train the model
         model.train(
@@ -56,7 +57,8 @@ class Trainer(Configurations):
             project=f"{model_name}_{model_experiment}",
             name=self.run_name,
             patience=10,
-            optimizer='Adam'
+            optimizer='Adam',
+            resume= is_resume
         )
         
         return model

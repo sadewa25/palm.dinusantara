@@ -6,8 +6,10 @@ from typing import Literal
 # Set up logging
 logging.basicConfig(level=logging.INFO,format='%(asctime)s:%(levelname)s:%(message)s')
 
-def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_onnx']):
-    if status != 'export' and status != 'visualize_onnx':
+def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_onnx', 'resume']):
+    trainer = Trainer("classify")
+
+    if status != 'export' and status != 'visualize_onnx' and status != 'resume':
         logging.info("Starting the process")
         cleaner = Cleaner(status= 'classify')
         logging.info("Rename Directory")
@@ -17,7 +19,6 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
             logging.info("Sampling Images")
             cleaner.sampling_images(5)
             
-        trainer = Trainer('classify')
         logging.info("Create data.yaml")
         trainer.yamlPreparation(status= status)
         logging.info("Training the model")
@@ -27,13 +28,11 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         logging.info("Process Completed")
         
     elif status == 'export':
-        trainer = Trainer("classify")
         logging.info("Exporting Progress")
         path = trainer.export_model("yolo11n_development/20250109_045532_128_classify/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
-        trainer = Trainer("classify")
         inp = input("Enter the model (1: 8n, 2: 9t, 3: 10n, 4: 11n, 5: 11s) -> ")
         sample_path = "sample/assignment_test_apple.jpeg"
         if inp == "1":
@@ -46,13 +45,22 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
             path_model = "yolo11n_development/20250109_045532_128_classify/weights/best.onnx"
         elif inp == "5":
             pass
-        
         trainer.visualize(path_onnx= path_model, image_test= sample_path)
+
+    
+    elif status == 'resume':
+        logging.info("Create data.yaml")
+        trainer.yamlPreparation()
+        logging.info("Training the model")
+        modelTrain = trainer.train(status_train= 'resume', path= "yolo11n_development/20250109_045532_128_classify/weights/last.pt")
+        logging.info("Validation the model")
+        trainer.val_test(model= modelTrain)
+        logging.info("Process Completed")
         
         
 
 if __name__ == "__main__":
-    inp = input("Enter the command (1: all, 2: sampling, 3: export, 4: vis_onnx) -> ")
+    inp = input("Enter the command (1: all, 2: sampling, 3: export, 4: vis_onnx, 5: resume) -> ")
     
     if inp == "1":
         main("all")
@@ -65,3 +73,6 @@ if __name__ == "__main__":
         
     elif inp == "4":
         main("visualize_onnx")
+
+    elif inp == "5":
+        main("resume")
