@@ -29,7 +29,7 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
     elif status == 'export':
         trainer = Trainer("classify")
         logging.info("Exporting Progress")
-        path = trainer.export_model("yolo11n_development/20250109_045532_128_classify/weights/best.pt")
+        path = trainer.export_model("yolov8n_development/20250109_085939_128_classify/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
@@ -37,7 +37,7 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         inp = input("Enter the model (1: 8n, 2: 9t, 3: 10n, 4: 11n, 5: 11s) -> ")
         sample_path = "sample/assignment_test_apple.jpeg"
         if inp == "1":
-            pass
+            path_model = "yolov8n_development/20250109_085939_128_classify/weights/best.onnx"
         if inp == "2":
             pass
         elif inp == "3":
