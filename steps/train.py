@@ -90,7 +90,8 @@ class Trainer(Configurations):
         results = onnx_model.predict(img, 
             max_det=-1, 
             conf=0.25,        # Confidence threshold
-            iou=0.45
+            iou=0.45,
+            task='detect'
         )[0]
         
         # Create figure and axes

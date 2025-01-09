@@ -27,17 +27,41 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         logging.info("Process Completed")
         
     elif status == 'export':
-        trainer = Trainer()
+        trainer = Trainer("classify")
         logging.info("Exporting Progress")
-        path = trainer.export_model("yolov9t_development/20250107_113955/weights/best.pt")
+        path = trainer.export_model("yolo11n_development/20250109_045532_128_classify/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
+        
+    elif status == 'visualize_onnx':
+        trainer = Trainer("classify")
+        inp = input("Enter the model (1: 8n, 2: 9t, 3: 10n, 4: 11n, 5: 11s) -> ")
+        sample_path = "sample/assignment_test_apple.jpeg"
+        if inp == "1":
+            pass
+        if inp == "2":
+            pass
+        elif inp == "3":
+            pass
+        elif inp == "4":
+            path_model = "yolo11n_development/20250109_045532_128_classify/weights/best.onnx"
+        elif inp == "5":
+            pass
+        
+        trainer.visualize(path_onnx= path_model, image_test= sample_path)
+        
         
 
 if __name__ == "__main__":
-    inp = input("1: all, 2: sampling, 3: export, 4: validation, 5: visualize_onnx -> ")
+    inp = input("Enter the command (1: all, 2: sampling, 3: export, 4: vis_onnx) -> ")
     
     if inp == "1":
         main("all")
     
     elif inp == "2":
         main("sampling")
+        
+    elif inp == "3":
+        main("export")
+        
+    elif inp == "4":
+        main("visualize_onnx")
