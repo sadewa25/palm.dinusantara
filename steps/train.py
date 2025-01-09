@@ -55,6 +55,8 @@ class Trainer(Configurations):
             device= get_device(),
             project=f"{model_name}_{model_experiment}",
             name=self.run_name,
+            patience=10,
+            optimizer='Adam'
         )
         
         return model
