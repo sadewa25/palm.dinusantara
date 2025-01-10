@@ -1,9 +1,9 @@
 name:
-  model_name: "yolov_9t"
+  model_name: "yolov_10n"
 
 # yolo11m, yolo11n, yolov8n, yolov9t, yolov10n
 model:
-  name: yolov9t
+  name: yolov10n
   experiment: development
 
 data_count: 
