@@ -113,12 +113,13 @@ class Trainer(Configurations):
 
         # Define color ranges for classification
         color_ranges = {
-            'red': ([0, 0, 100], [80, 80, 255]),        # Lower and Upper range for red
-            'yellow': ([0, 100, 100], [100, 255, 255]), # Yellow
-            'green': ([0, 100, 0], [100, 255, 100])     # Green
+            'red': ([0, 50, 50], [10, 255, 255]),  # Lower and Upper ranges for red
+            'red2': ([170, 50, 50], [180, 255, 255]),
+            'yellow': ([20, 100, 100], [30, 255, 255]),  # Yellow
+            'green': ([35, 50, 50], [85, 255, 255])      # Green
         }
         
-        counts = {color: 0 for color in color_ranges}
+        counts = {color: 0 for color in color_ranges if color != 'red2'}
         
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         name_ext = f"{self.config['output']['root']}/{self.config['output']['model']}/{base_model}_{current_time}{self.ext_machine}"
@@ -141,12 +142,18 @@ class Trainer(Configurations):
             
             # Define yellow range
             label = 'unknown'
+            
+            max_color = 0
             for color, (lower, upper) in color_ranges.items():
                 mask = cv2.inRange(hsv_roi, np.array(lower), np.array(upper))
-                if cv2.countNonZero(mask) > 0:  # Check if color exists
-                    label = color
-                    counts[color] += 1
-                    break
+                non_zero_count = cv2.countNonZero(mask)
+                if non_zero_count > 0:  # Check if color exists
+                    if non_zero_count > max_color:
+                        max_color = non_zero_count
+                        label = color.replace("2", "")
+            
+            
+            counts[label] += 1
             
             back_img = cv2.cvtColor(roi, cv2.COLOR_RGB2BGR)
             cv2.imwrite(f"{name_ext}/{label}_{counts[label]}.jpg", back_img)
@@ -161,10 +168,6 @@ class Trainer(Configurations):
                 facecolor='none'
             )
             ax.add_patch(rect)
-            
-            # Add label
-            # label = f"{conf:.2f}"
-            # plt.text(x1, y1, label, color='white', bbox=dict(facecolor='red', alpha=0.5))
         
         save_path = f"{name_ext}.png"
         plt.axis('off')
