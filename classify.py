@@ -29,7 +29,7 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         
     elif status == 'export':
         logging.info("Exporting Progress")
-        path = trainer.export_model("yolov8n_development/20250109_085939_128_classify/weights/best.pt")
+        path = trainer.export_model("yolov9t_development/20250109_145311_512_classify/weights/best.pt")
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
@@ -38,7 +38,7 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         if inp == "1":
             path_model = "yolov8n_development/20250109_085939_128_classify/weights/best.onnx"
         if inp == "2":
-            pass
+            path_model = "yolov9t_development/20250109_145311_512_classify/weights/best.onnx"
         elif inp == "3":
             pass
         elif inp == "4":

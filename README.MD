@@ -44,12 +44,12 @@ https://drive.google.com/drive/folders/1igMurqCpRFVVZzHfSKclCBTOUZ-FI8rW?usp=sha
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/sadewa25/palm.dinusantara.git
 ```
 
-Download datasets
+Unzip datasets
 ```
-https://drive.google.com/file/d/1t7led_uZB_UA6Va2q7TmqxCxOKk0q1O5/view?usp=sharing
+Unzip the downloaded datasets into projects folder
 ```
 
 Go to the project directory
