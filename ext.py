@@ -4,6 +4,9 @@ import numpy as np
 import cv2
 import logging
 from datetime import datetime
+from ultralytics import YOLO
+from fastapi import UploadFile
+
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 MAX_FILE_SIZE = 30_000_000  # 5MB
@@ -59,3 +62,39 @@ def FileImageSize(contents, logger: any):
     if len(contents) > MAX_FILE_SIZE:
         logger.error("Error Max File Image Size")
         raise HTTPException(status_code=400, detail="File too large")
+
+def FormatTempPath(static_count_dir: str, time_files: str):
+    return f"{static_count_dir}/temp_{time_files}.jpg"
+
+def ValidateImg(file: UploadFile, contents: bytes, logger: any):
+    NotAllowedExtensions(file, logger= logger)
+    
+    # Image is valid
+    DecodeImage(contents= contents, logger= logger)
+    
+    # Validate file size
+    FileImageSize(contents= contents, logger= logger)
+    
+
+def PredictImg(path: str, contents: bytes, static_count_dir: str):
+    
+    # Save uploaded file temporarily
+    time_files = datetime.now().strftime('%Y%m%d_%H%M%S')
+    temp_path = FormatTempPath(static_count_dir= static_count_dir, time_files= time_files)
+    with open(temp_path, "wb") as f:
+        f.write(contents)
+
+    # Load and process image
+    img = cv2.imread(temp_path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, (640, 640))
+    
+    onnx_model = YOLO(path)
+    results = onnx_model.predict(img, 
+        max_det=-1, 
+        conf=0.25,        # Confidence threshold
+        iou=0.45,
+        task='detect'
+    )[0]
+    
+    return results, img, time_files

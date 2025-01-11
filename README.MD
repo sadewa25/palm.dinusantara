@@ -98,6 +98,11 @@ Run Classify
   python classify.py
 ```
 
+Run FastAPI
+```bash
+  uvicorn api:app --reload
+```
+
 
 ## Lessons Learned
 
