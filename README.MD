@@ -25,6 +25,13 @@ There are two projects which contains of this projects, first is about the count
 
 
 
+## Architecture 
+![Architecture-Development](git_images/arc_development.png)
+
+
+
+
+
 ## Screenshots
 - F1-Score Palm Tree
 
@@ -58,8 +65,19 @@ Go to the project directory
   cd my-project
 ```
 
-Install dependencies
+Create Environment
 
+```bash
+  npm install
+```
+
+Change Environment
+
+```bash
+  npm install
+```
+
+Install Depedencies
 ```bash
   npm install
 ```
@@ -68,6 +86,16 @@ Start mlflow ui
 
 ```bash
   mlflow server --backend-store-uri runs/mlflow
+```
+
+Run Count
+```bash
+  python count.py
+```
+
+Run Classify
+```bash
+  python classify.py
 ```
 
 

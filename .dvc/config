@@ -1,0 +1,7 @@
+[core]
+    remote = palm.dinusantara
+['remote "palm.dinusantara"']
+    url = s3://palm.dinusantara/DVC
+    endpointurl = http://103.25.111.155:9000
+    access_key_id = CbtlxwLojowEg5kXzekr
+    secret_access_key = iUEG8v0vhgepWjOwOPqO35CuwAnze664jRC5qf7T

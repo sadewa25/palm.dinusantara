@@ -1,0 +1,6 @@
+outs:
+- md5: 66e446e0333765dbfa7ec6612a0edf68.dir
+  size: 182136378
+  nfiles: 8751
+  hash: md5
+  path: data_classify

@@ -32,3 +32,4 @@ def move_files(paths: list, root_path: str, dest: str, status: Literal['image', 
         img = f"{root_path}/{i}{ext}"
         if os.path.exists(img):
             shutil.move(img, dest)
+            

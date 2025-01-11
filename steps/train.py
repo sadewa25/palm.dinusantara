@@ -40,6 +40,8 @@ class Trainer(Configurations):
             
         
     def train(self, status_train: Literal['start', 'resume'] = 'start', path: str = ''):
+        os.environ["MLFLOW_TRACKING_URI"] = "http://103.25.111.155:5000"
+        
         model_name = self.config['model']['name']
         model_experiment = self.config['model']['experiment']
         epochs = self.config['train']['max_epochs']
