@@ -135,29 +135,30 @@ class Trainer(Configurations):
             conf = box.conf[0]
             cls = box.cls[0]
             
-            # Get region of interest within rectangle
-            roi = img[int(y1):int(y2), int(x1):int(x2)]
-            
-            # Convert to HSV
-            hsv_roi = cv2.cvtColor(roi, cv2.COLOR_RGB2HSV)
-            
-            # Define yellow range
-            label = 'unknown'
-            
-            max_color = 0
-            for color, (lower, upper) in color_ranges.items():
-                mask = cv2.inRange(hsv_roi, np.array(lower), np.array(upper))
-                non_zero_count = cv2.countNonZero(mask)
-                if non_zero_count > 0:  # Check if color exists
-                    if non_zero_count > max_color:
-                        max_color = non_zero_count
-                        label = color.replace("2", "")
-            
-            
-            counts[label] += 1
-            
-            back_img = cv2.cvtColor(roi, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(f"{name_ext}/{label}_{counts[label]}.jpg", back_img)
+            if self.status == 'data_classify':
+                # Get region of interest within rectangle
+                roi = img[int(y1):int(y2), int(x1):int(x2)]
+                
+                # Convert to HSV
+                hsv_roi = cv2.cvtColor(roi, cv2.COLOR_RGB2HSV)
+                
+                # Define yellow range
+                label = 'unknown'
+                
+                max_color = 0
+                for color, (lower, upper) in color_ranges.items():
+                    mask = cv2.inRange(hsv_roi, np.array(lower), np.array(upper))
+                    non_zero_count = cv2.countNonZero(mask)
+                    if non_zero_count > 0:  # Check if color exists
+                        if non_zero_count > max_color:
+                            max_color = non_zero_count
+                            label = color.replace("2", "")
+                
+                
+                counts[label] += 1
+                
+                back_img = cv2.cvtColor(roi, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(f"{name_ext}/{label}_{counts[label]}.jpg", back_img)
             
             # Create rectangle patch
             rect = patches.Rectangle(

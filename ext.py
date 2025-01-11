@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
-MAX_FILE_SIZE = 5_000_000  # 5MB
+MAX_FILE_SIZE = 30_000_000  # 5MB
 
 def setup_logger():
     # Create logs directory if it doesn't exist
