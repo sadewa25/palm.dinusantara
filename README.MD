@@ -30,8 +30,6 @@ There are two projects which contains of this projects, first is about the count
 
 
 
-
-
 ## Screenshots
 - F1-Score Palm Tree
 
@@ -148,6 +146,19 @@ To deploy this project run
 
 ```bash
   npm run deploy
+```
+
+
+## Requirements.txt
+Generate requirements library on the project
+```bash
+pip freeze | sed 's/@.*//g' > requirements_api.txt
+```
+
+## Docker
+Build image
+```bash
+docker build --platform linux/amd64 -t sadewawicak25/palm.dinusantara:latest .
 ```
 
 
