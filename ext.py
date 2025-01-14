@@ -3,6 +3,7 @@ from fastapi import HTTPException
 import numpy as np
 import cv2
 import logging
+import onnxruntime as ort
 from datetime import datetime
 from ultralytics import YOLO
 from fastapi import UploadFile
@@ -75,6 +76,27 @@ def ValidateImg(file: UploadFile, contents: bytes, logger: any):
     # Validate file size
     FileImageSize(contents= contents, logger= logger)
     
+    
+def preprocess_image(image_path: str):
+    """Preprocess the image for ONNX model inference."""
+    img = cv2.imread(image_path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, (640, 640))  # Resize to the model's input size
+    img = img.astype(np.float32)
+    img = img / 255.0  # Normalize to [0, 1]
+    img = np.transpose(img, (2, 0, 1))  # HWC to CHW format
+    img = np.expand_dims(img, axis=0)  # Add batch dimension
+    return img
+
+def postprocess_output(output: np.ndarray, conf_threshold: float = 0.25, iou_threshold: float = 0.45):
+    """Postprocess the ONNX model output to filter predictions."""
+    predictions = []
+    for pred in output:
+        boxes, scores, labels = pred[:, :4], pred[:, 4], pred[:, 5].astype(int)
+        for box, score, label in zip(boxes, scores, labels):
+            if score >= conf_threshold:
+                predictions.append({"box": box, "score": score, "label": label})
+    return predictions
 
 def PredictImg(path: str, contents: bytes, static_count_dir: str):
     
@@ -96,5 +118,20 @@ def PredictImg(path: str, contents: bytes, static_count_dir: str):
         iou=0.45,
         task='detect'
     )[0]
+    
+    for idx, box in enumerate(results.boxes.data.tolist(), start=1):
+            x1, y1, x2, y2, _, _ = box
+            cv2.rectangle(img, 
+                         (int(x1), int(y1)), 
+                         (int(x2), int(y2)), 
+                         (0, 0, 255), 1)
+            
+            cv2.putText(img,
+                       f'{idx}',
+                       (int(x1), int(y1-5)), # position slightly above box
+                       cv2.FONT_HERSHEY_SIMPLEX,
+                       0.2, # font scale
+                       (0, 0, 255), # color (BGR)
+                       1)
     
     return results, img, time_files

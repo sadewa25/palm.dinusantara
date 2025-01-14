@@ -32,8 +32,6 @@ COPY static ./static/
 COPY ext.py .
 COPY api.py .
 
-
-
 # COPY utils ./utils/
 # COPY .env .
 # COPY app.py .
