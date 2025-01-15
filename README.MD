@@ -25,19 +25,18 @@ There are two projects which contains of this projects, first is about the count
 
 
 
-## Architecture 
+## Development Architecture 
 ![Architecture-Development](git_images/arc_development.png)
 
 
 
-## Screenshots
-- F1-Score Palm Tree
+## Screenshots Count (YOLOv8n)
 
-![F1-Score](yolo11n_development/20250105_164322/F1_curve.png)
+![Results](yolov8n_development/20250106_092214/results.png)
 
-- Results Palm Tree
 
-![F1-Score](yolo11n_development/20250105_164322/results.png)
+## Screenshots Classify (YOLOv11n)
+![Results](yolo11n_development/20250109_045532_128_classify/results.png)
 
 
 ## Datasets
@@ -60,24 +59,24 @@ Unzip the downloaded datasets into projects folder
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd palm.dinusantara
 ```
 
 Create Environment
 
 ```bash
-  npm install
+  python -m venv palm_venv
 ```
 
-Change Environment
+Source Environment
 
 ```bash
-  npm install
+  source palm_venv/bin/activate
 ```
 
 Install Depedencies
 ```bash
-  npm install
+  pip install -r requirements_base.txt
 ```
 
 Start mlflow ui
@@ -102,9 +101,67 @@ Run FastAPI
 ```
 
 
+## MLFlow UI
+Access on http://127.0.0.1:5000/
+
+![Results](git_images/mlflow_ui.png)
+
+
 ## Lessons Learned
 
-What did you learn while building this project? What challenges did you face and how did you overcome them?
+On this projects, I tried some architecture like YOLOv8n, YOLO10n, YOLOv9t, and YOLOv11n but based on our results the best performance is achieved from YOLOv8n and YOLOv11n.
+
+
+## Train
+Run main command for classify
+```bash
+python classify.py
+```
+
+Run main command for count
+```bash
+python count.py
+```
+
+Chose options
+```bash
+1 (train all data), 2 (sampling some data), 4 
+```
+
+## Visualize
+Run main command for classify
+```bash
+python classify.py
+```
+
+Run main command for count
+```bash
+python count.py
+```
+
+Chose options
+```bash
+3 (visualize)
+```
+
+Output folder
+```bash
+output/model/name
+```
+
+
+## Sample Output
+![Count Palm Tree](output/model/yolov8n_20250114_213927.png)
+![Classification Apple](output/model/yolo11n_20250114_214036_classify.png)
+
+
+## Docker Fast API
+- Build Docker
+```sh
+docker build --platform linux/amd64 -t sadewawicak25/palm.dinusantara:latest .
+```
+
+docker run -p 8002:8002 -v /Users/sadewawicak/Storage/Static:/app/static sadewawicak25/palm.dinusantara:latest
 
 
 ## Features
@@ -118,15 +175,6 @@ What did you learn while building this project? What challenges did you face and
 ## Feedback
 
 If you have any feedback, please reach out to us at fake@fake.com
-
-## Color Reference
-
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Example Color | ![#0a192f](https://via.placeholder.com/10/0a192f?text=+) #0a192f |
-| Example Color | ![#f8f8f8](https://via.placeholder.com/10/f8f8f8?text=+) #f8f8f8 |
-| Example Color | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+) #00b48a |
-| Example Color | ![#00d1a0](https://via.placeholder.com/10/00b48a?text=+) #00d1a0 |
 
 
 ## Usage/Examples

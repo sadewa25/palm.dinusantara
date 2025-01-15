@@ -40,8 +40,6 @@ class Trainer(Configurations):
             
         
     def train(self, status_train: Literal['start', 'resume'] = 'start', path: str = ''):
-        os.environ["MLFLOW_TRACKING_URI"] = "http://103.25.111.155:5000"
-        
         model_name = self.config['model']['name']
         model_experiment = self.config['model']['experiment']
         epochs = self.config['train']['max_epochs']
@@ -125,12 +123,12 @@ class Trainer(Configurations):
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         name_ext = f"{self.config['output']['root']}/{self.config['output']['model']}/{base_model}_{current_time}{self.ext_machine}"
         
-        if not os.path.exists(name_ext):
+        if not os.path.exists(name_ext) and self.status == 'data_classify':
             os.makedirs(name_ext)
         
         # Plot each detection
         boxes = results.boxes
-        for box in boxes:
+        for idx, box in enumerate(boxes):
             x1, y1, x2, y2 = box.xyxy[0]
             conf = box.conf[0]
             cls = box.cls[0]
@@ -165,12 +163,16 @@ class Trainer(Configurations):
                 (x1, y1), 
                 x2-x1, 
                 y2-y1, 
-                linewidth=2, 
+                linewidth=1, 
                 edgecolor='r', 
                 facecolor='none'
             )
             ax.add_patch(rect)
+            
+            ax.text(int(x1), int(y1-5), f'{idx}', fontsize=6, color='red')
         
+        fig = plt.gcf()
+        fig.set_size_inches(12.80, 12.80) 
         save_path = f"{name_ext}.png"
         plt.axis('off')
         plt.savefig(save_path, bbox_inches='tight', pad_inches=0)

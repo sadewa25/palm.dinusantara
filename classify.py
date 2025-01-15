@@ -33,18 +33,12 @@ def main(status: Literal['sampling', 'all', 'export', 'validation', 'visualize_o
         logging.info(f"Exporting Completed : {path}")
         
     elif status == 'visualize_onnx':
-        inp = input("Enter the model (1: 8n, 2: 9t, 3: 10n, 4: 11n, 5: 11s) -> ")
+        inp = input("Enter the model (1: 8n, 2: 11n) -> ")
         sample_path = "sample/assignment_test_apple.jpeg"
         if inp == "1":
             path_model = "yolov8n_development/20250109_085939_128_classify/weights/best.onnx"
         if inp == "2":
-            path_model = "yolov9t_development/20250109_145311_512_classify/weights/best.onnx"
-        elif inp == "3":
-            pass
-        elif inp == "4":
             path_model = "yolo11n_development/20250109_045532_128_classify/weights/best.onnx"
-        elif inp == "5":
-            pass
         trainer.visualize(path_onnx= path_model, image_test= sample_path)
 
     

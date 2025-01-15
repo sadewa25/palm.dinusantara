@@ -19,15 +19,11 @@ pydantic==2.10.4
 pydantic_core==2.27.2
 regex==2024.11.6
 requests==2.32.3
-scikit-learn==1.6.0
-scipy==1.14.1
 six 
 slowapi==0.1.9
 toml==0.10.2
 tornado 
 tqdm==4.67.1
-ua-parser==1.0.0
 ultralytics==8.3.58
-ultralytics-thop==2.0.13
 uvicorn==0.34.0
 Werkzeug==3.1.3

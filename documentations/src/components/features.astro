@@ -1,0 +1,68 @@
+---
+// @ts-ignore
+import { Icon } from "astro-icon/components";
+
+const features = [
+  {
+    title: "Identify 34 Indonesian Traditional Foods",
+    description:
+      "asinan-jakarta, ayam-betutu, ayam-bumbu-rujak, ayam-goreng-lengkuas, bika-ambon, bir-pletok, bubur-manado, cendol, es-dawet, gado-gado, gudeg, gulai-ikan-mas, keladi, kerak-telor, klappertart, kolak, kue-lumpur, laksa-bogor, lumpia-semarang, mie-aceh, nagasari, papeda, pempek-palembang, rawon-surabaya, rendang, rujak-cingur, sate-ayam-madura, sate-lilit, sate-maranggi, soerabi, soto-ayam-lamongan, soto-banjar, tahu-telur",
+    icon: "bx:bxs-briefcase",
+  },
+  {
+    title: "Extensions Validation",
+    description:
+      "Ensure that upload can be done by validating the extension of the file that will be uploaded.",
+    icon: "bx:bxs-window-alt",
+  },
+  {
+    title: "File Type Validation",
+    description:
+      "Ensure that upload image is actually an image can be detect by our systems. To prevent file spoofing on our systems.",
+    icon: "bx:bxs-data",
+  },
+  {
+    title: "File Size Validation",
+    description:
+      "The maximum file size that can be uploaded is 5MB. This is to prevent the server from being overwhelmed by large files.",
+    icon: "bx:bxs-bot",
+  },
+  {
+    title: "ML Flow Integration",
+    description:
+      "Our systems build with ML Flow to ensure our production is always in the best condition.",
+    icon: "bx:bxs-file-find",
+  },
+  {
+    title: "F1 Score Accuracy",
+    description:
+      "Results our model based on data predictions using F1 Score is 96%. F1 Score is the harmonic mean of precision and recall. ",
+    icon: "bx:bxs-user",
+  },
+];
+---
+
+<div class="mt-16 md:mt-0">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    Everything you need to know about this versions 0.0.1
+  </h2>
+  <p class="text-2xl mt-4 text-slate-600">
+    Create more innovations from this versions 0.0.1. We provide the best features for you.
+  </p>
+</div>
+
+<div class="grid sm:grid-cols-2 md:grid-cols-3 mt-16 gap-16">
+  {
+    features.map((item) => (
+      <div class="flex gap-4 items-start">
+        <div class="mt-1 bg-black rounded-full  p-2 w-8 h-8 shrink-0">
+          <Icon class="text-white" name={item.icon} />
+        </div>
+        <div>
+          <h3 class="font-semibold text-2xl">{item.title}</h3>{" "}
+          <p class="text-slate-500 text-xl mt-2 leading-relaxed">{item.description}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>

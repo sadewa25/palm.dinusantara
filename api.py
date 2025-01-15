@@ -195,17 +195,7 @@ async def upload_count(request: Request, file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Error uploading file: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/upload_count_onnx")
-@limiter.limit("5/minute")
-async def upload_count_onnx(request: Request, file: UploadFile = File(...)):
     
-    contents = await file.read()
     
-    time_files = datetime.now().strftime('%Y%m%d_%H%M%S')
-    temp_path = FormatTempPath(static_count_dir= static_count_dir, time_files= time_files)
-    with open(temp_path, "wb") as f:
-        f.write(contents)
         
     

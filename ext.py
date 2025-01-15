@@ -3,7 +3,6 @@ from fastapi import HTTPException
 import numpy as np
 import cv2
 import logging
-import onnxruntime as ort
 from datetime import datetime
 from ultralytics import YOLO
 from fastapi import UploadFile

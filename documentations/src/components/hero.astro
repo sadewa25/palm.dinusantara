@@ -1,0 +1,39 @@
+---
+import { Picture } from "astro:assets";
+import heroImage from "assets/hero.png";
+import Link from "@components/ui/link.astro";
+---
+
+<main
+  class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
+  <div class="py-6 md:order-1 hidden md:block">
+    <Picture
+      src={heroImage}
+      alt="Astronaut in the air"
+      widths={[200, 400, 600]}
+      sizes="(max-width: 800px) 100vw, 620px"
+      loading="eager"
+      format="avif"
+    />
+  </div>
+  <div>
+    <h1
+      class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter font-sans">
+      Palm Oil Counting and Cropping Apple Based On Color
+    </h1>
+    <p class="text-xl mt-4 text-slate-600 max-w-xl">
+      Introducing Version 0.0.1 gateway to the future of palm oil business. Can you imagine how easy to counting the total of palm oil only with upload the image palm oil?, 
+      {" "} Think about it, how easy to cropping the apple based on color? to find the best apple to sell on the market?,
+      {" "} Let's start now!
+    </p>
+    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+      <Link
+        href="https://palm.dinusantara.id/docs"
+        target="_blank"
+        class="flex gap-1 items-center justify-center text-xl"
+        rel="noopener">
+         Take 'Ur Actions!
+      </Link>
+    </div>
+  </div>
+</main>

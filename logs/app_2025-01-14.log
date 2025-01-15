@@ -1,0 +1,5 @@
+2025-01-14 07:21:11,535 - food_dinusantara - ERROR - Error uploading file: 'numpy.ndarray' object has no attribute 'boxes'
+2025-01-14 07:21:44,667 - food_dinusantara - ERROR - Error uploading file: 'numpy.ndarray' object has no attribute 'boxes'
+2025-01-14 07:26:39,305 - food_dinusantara - ERROR - Error uploading file: 'list' object has no attribute 'boxes'
+2025-01-14 07:29:10,174 - food_dinusantara - ERROR - Error uploading file: 'numpy.ndarray' object has no attribute 'boxes'
+2025-01-14 07:34:07,550 - food_dinusantara - ERROR - Error uploading file: 'list' object has no attribute 'boxes'
