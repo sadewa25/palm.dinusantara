@@ -101,7 +101,7 @@ Run Classify
 
 Run FastAPI
 ```bash
-  uvicorn api:app --reload
+  python api.py
 ```
 
 
