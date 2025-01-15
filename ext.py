@@ -9,7 +9,7 @@ from fastapi import UploadFile
 
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
-MAX_FILE_SIZE = 30_000_000  # 5MB
+MAX_FILE_SIZE = 10_000_000  # 10MB
 
 def setup_logger():
     # Create logs directory if it doesn't exist

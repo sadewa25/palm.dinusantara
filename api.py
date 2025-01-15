@@ -6,18 +6,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from ext import NotAllowedExtensions, setup_logger, DecodeImage, FileImageSize, PredictImg, FormatTempPath, ValidateImg
-from ultralytics import YOLO
-from datetime import datetime
+from ext import setup_logger, PredictImg, FormatTempPath, ValidateImg
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 import zipfile
+import asyncio
+from starlette.responses import Response
+import uvicorn
+
+class TimeoutMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        try:
+            return await asyncio.wait_for(call_next(request), timeout=360.0)
+        except asyncio.TimeoutError:
+            return Response("Request timed out", status_code=408)
 
 
 logger = setup_logger()
 
 
 limiter = Limiter(key_func=get_remote_address)
-app = FastAPI(title="Palm.Dinusantara", description="API for Palm Count and Classifications Apple", version="0.0.1")
+app = FastAPI(title="Palm.Dinusantara", description="API for Palm Count and Classifications Apple (Timeout 360s and Max File Size 10MB)", version="0.0.1")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
@@ -30,6 +39,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+app.add_middleware(TimeoutMiddleware)
+
 # Add at app initialization
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -39,7 +50,7 @@ static_classify_dir = "static/classify"
 
 
 @app.post("/upload_classify")
-@limiter.limit("5/minute")
+@limiter.limit("300/minute")
 async def upload_classify(request: Request, file: UploadFile = File(...)):
     # create folder when not exists
     os.makedirs(static_classify_dir, exist_ok=True)
@@ -106,7 +117,7 @@ async def upload_classify(request: Request, file: UploadFile = File(...)):
             interpolation=cv2.INTER_AREA
         )
         
-        output_path = f"{static_classify_dir}/detected_{time_files}.jpg"
+        output_path = f"{static_classify_dir}/detected_{time_files}_{len(boxes)}.jpg"
         cv2.imwrite(output_path, cv2.cvtColor(annotated_img_hd, cv2.COLOR_RGB2BGR))
         
         # delete original image from users
@@ -139,7 +150,7 @@ async def upload_classify(request: Request, file: UploadFile = File(...)):
 
 
 @app.post("/upload_count")
-@limiter.limit("5/minute")
+@limiter.limit("300/minute")
 async def upload_count(request: Request, file: UploadFile = File(...)):
     
     # create folder when not exists
@@ -177,7 +188,7 @@ async def upload_count(request: Request, file: UploadFile = File(...)):
             interpolation=cv2.INTER_AREA
         )
         
-        output_path = f"{static_count_dir}/detected_{time_files}.jpg"
+        output_path = f"{static_count_dir}/detected_{time_files}_{len(results.boxes)}.jpg"
         cv2.imwrite(output_path, annotated_img_hd)
         
         # delete original image from users
@@ -196,6 +207,19 @@ async def upload_count(request: Request, file: UploadFile = File(...)):
         logger.error(f"Error uploading file: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
     
-    
-        
-    
+
+
+server_settings = {
+    "timeout_keep_alive": 360,
+    "timeout_graceful_shutdown": 360
+}
+
+# Configure ASGI server
+if __name__ == "__main__":
+    uvicorn.run(
+        "api:app",
+        host="0.0.0.0",
+        port=8002,
+        **server_settings
+    )
+

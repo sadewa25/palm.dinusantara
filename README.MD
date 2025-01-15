@@ -1,5 +1,5 @@
 
-# palm.dinusantara.id
+# palm.dinusantara.id 👋
 
 There are two projects which contains of this projects, first is about the counting palm tree based on image uploaded by users, and classifications color on an apple. 
 
@@ -8,7 +8,7 @@ There are two projects which contains of this projects, first is about the count
 
 ## Authors
 
-- [@sadewawicak25](https://sadewawicak25.medium.com/)
+- 😎👌🔥 [@sadewawicak25](https://sadewawicak25.medium.com/)
 
 
 
@@ -22,6 +22,10 @@ There are two projects which contains of this projects, first is about the count
 **Load Balancer:** Traefik
 
 **ML Metrics:** MLFlow
+
+**Web Frameworks:** Astro
+
+**NodeJS:** v20.16.0 with `pnpm`
 
 
 
@@ -109,7 +113,19 @@ Access on http://127.0.0.1:5000/
 
 ## Lessons Learned
 
-On this projects, I tried some architecture like YOLOv8n, YOLO10n, YOLOv9t, and YOLOv11n but based on our results the best performance is achieved from YOLOv8n and YOLOv11n.
+💡 On this projects, I tried some architecture like YOLOv8n, YOLO10n, YOLOv9t, and YOLOv11n but based on our results the best performance is achieved from YOLOv8n and YOLOv11n.
+
+## Configuration Architecture
+To change the configuration architecture during training process just change the `config.yaml`.
+
+| Command | Description |
+| --- | --- |
+| `name.model_name` | Generate folder for results Ultralytics |
+| `model.name` | Architecture which is used references on https://docs.ultralytics.com/models/yolov8/#performance-metrics |
+| `data_count.old` | Same it with folder name based on unzip datasets |
+| `data_classify.old` | Same it with folder name based on unzip datasets |
+| `train` | Configurations for training |
+| `preprocessing` | Configurations for preprocessing image |
 
 
 ## Train
@@ -158,44 +174,24 @@ output/model/name
 ## Docker Fast API
 - Build Docker
 ```sh
-docker build --platform linux/amd64 -t sadewawicak25/palm.dinusantara:latest .
+docker build --platform linux/amd64 -f Dockerfile.API -t sadewawicak25/palm.dinusantara:latest .
 ```
 
-docker run -p 8002:8002 -v /Users/sadewawicak/Storage/Static:/app/static sadewawicak25/palm.dinusantara:latest
-
-
-## Features
-
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
-
-
-## Feedback
-
-If you have any feedback, please reach out to us at fake@fake.com
-
-
-## Usage/Examples
-
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
+- Run Docker Image
+```sh 
+docker run -d -p 8002:8002 -v yourpath:/app/static sadewawicak25/palm.dinusantara:latest
 ```
 
-
-## Deployment
-
-To deploy this project run
-
-```bash
-  npm run deploy
+## Docker Documentation
+- Build Docker Image
+```sh
+docker build --platform linux/amd64 -t sadewawicak25/palm.dinusantara-fe:latest .
 ```
 
+- Run Docker Image
+```sh
+docker run -d -p 3002:3002 sadewawicak25/palm.dinusantara-fe:latest
+```
 
 ## Requirements.txt
 Generate requirements library on the project
@@ -203,49 +199,30 @@ Generate requirements library on the project
 pip freeze | sed 's/@.*//g' > requirements_api.txt
 ```
 
-## Docker
-Build image
-```bash
-docker build --platform linux/amd64 -t sadewawicak25/palm.dinusantara:latest .
-```
-
+## Deployment Architecture
+![Architecture Productions](git_images/arc_production.png)
 
 ## Demo
-
-Insert gif or link to demo
-
-
-## API Reference
-
-#### Get all items
-
-```http
-  GET /api/items
+URL
+```bash
+https://palm.dinusantara.id/
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+![Demo Websites](git_images/ss_palm.dinusantara.id.jpg)
 
-#### Get item
-
-```http
-  GET /api/items/${id}
+Sample Access Result
+```bash
+https://palm.dinusantara.id/{{response}}
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
+Sample
+```bash
+https://palm.dinusantara.id/static/counts/detected_20250115_092955_605.jpg
+```
 
 
 ## Support
 
-For support, email fake@fake.com or join our Slack channel.
+✅ For support and feedback just email me on wicaksanasadewa@proton.me. 
 
-
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
 

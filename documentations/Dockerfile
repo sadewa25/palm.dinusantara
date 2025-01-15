@@ -3,10 +3,11 @@ FROM node:20.18.1-alpine3.21 AS build
 WORKDIR /app
 
 RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml ./
 
+RUN pnpm install --frozen-lockfile
 COPY . .
 
-RUN pnpm install
 RUN pnpm run build
 
 FROM node:20.18.1-alpine3.21 AS runtime
@@ -17,9 +18,7 @@ RUN npm install -g pnpm
 
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
-
-# Install production dependencies
-RUN pnpm install --prod
+RUN pnpm install --prod --frozen-lockfile
 
 # Copy built application
 COPY --from=build /app/dist ./dist
